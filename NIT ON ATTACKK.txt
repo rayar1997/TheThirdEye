@@ -1,0 +1,233 @@
+1) ifconfig on RPi IP ADDRESS - 192.168.43.177 (raspberrypi.local)
+
+2) To access files manually on linux :-
+     IF SDCARD IS READONLY:-	
+	a) check permissions = mount | grep /boot
+	b) sudo mount -o remount,rw/boot
+     IF ALL ARE PERFECT THEN LINUX NEEDS PERMISSIONS
+	a) Right click in folder needed to be modified
+	b) Select root access
+	c) enter computer password
+	d) ENJOY!!
+
+3) TO SEND EMAIL SIMPLY:-
+
+# Python code to illustrate Sending mail from
+# your Gmail account
+import smtplib
+
+# creates SMTP session
+s = smtplib.SMTP('smtp.gmail.com', 587)
+
+# start TLS for security
+s.starttls()
+
+# Authentication
+s.login("rayar1997@gmail.com", "rayar16711997")
+
+# message to be sent
+message = "WOW MESSAGE SENT"
+
+# sending the mail
+s.sendmail("rayar1997@gmail.com", "rayar1997@gmail.com", message)
+
+# terminating the session
+s.quit()
+
+
+
+4) TO SEND ATTACHED EMAIL
+
+# Python code to illustrate Sending mail with attachments
+# from your Gmail account
+
+# libraries to be imported
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+fromaddr = "rayar1997@gmail.com"
+toaddr = "rayar1997@gmail.com"
+
+# instance of MIMEMultipart
+msg = MIMEMultipart()
+
+# storing the senders email address
+msg['From'] = fromaddr
+
+# storing the receivers email address
+msg['To'] = toaddr
+
+# storing the subject
+msg['Subject'] = "PYTHON MAIL"
+
+# string to store the body of the mail
+body = "PLEASE CHECK WHOSE THE GUEST AND CONTROL LOCK"
+
+# attach the body with the msg instance
+msg.attach(MIMEText(body, 'plain'))
+
+# open the file to be sent
+filename = "trial.jpg"
+attachment = open("H:\\pic.jpg", "rb")
+
+# instance of MIMEBase and named as p
+p = MIMEBase('application', 'octet-stream')
+
+# To change the payload into encoded form
+p.set_payload((attachment).read())
+
+# encode into base64
+encoders.encode_base64(p)
+
+p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+
+# attach the instance 'p' to instance 'msg'
+msg.attach(p)
+
+# creates SMTP session
+s = smtplib.SMTP('smtp.gmail.com', 587)
+
+# start TLS for security
+s.starttls()
+
+# Authentication
+s.login(fromaddr, "rayar16711997")
+
+# Converts the Multipart msg into a string
+text = msg.as_string()
+
+# sending the mail
+s.sendmail(fromaddr, toaddr, text)
+
+# terminating the session
+s.quit()
+
+
+5) BUTTON PRESS - RASPBERRY PI PYTHON CODE
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+while True:
+    input_state = GPIO.input(18)
+    if input_state == False:
+        print('Button Pressed')
+        time.sleep(0.2)
+
+6) RASPBERRY PI CAMERA CAPTURE IMAGE CODE
+
+
+import picamera
+from time import sleep
+
+#create object for PiCamera class
+camera = picamera.PiCamera()
+#set resolution
+camera.resolution = (1024, 768)
+camera.brightness = 60
+camera.start_preview()
+#add text on image
+camera.annotate_text = 'Hi Pi User'
+sleep(5)
+#store image
+camera.capture('image1.jpeg')
+camera.stop_preview()
+
+
+
+7) RASPBERRY CAMERA VIDEO RECORD
+
+import picamera
+from time import sleep
+
+camera = picamera.PiCamera()
+camera.resolution = (640, 480)
+
+print()
+#start recording using pi camera
+camera.start_recording("/home/pi/demo.h264")
+#wait for video to record
+camera.wait_recording(20)
+#stop recording
+camera.stop_recording()
+camera.close()
+print("video recording stopped")
+
+
+
+8) SEND DATA TO UBIDOTS FROM PYTHON
+
+import requests
+import time
+
+v=1
+
+while(1):
+    val = {'VARIABLE NAME': v}
+    r = requests.post('http://things.ubidots.com/api/v1.6/devices/DEVICE NAME/ ?token=ACCOUNT-TOKEN',data=val)
+    v  = (0 if v==1 else 1)
+    time.sleep(6)
+
+
+9) GET DATA FROM UBIDOTS USING PYTHON 
+
+
+import requests
+import time
+
+v=1
+
+while(1):
+    v = requests.get('http://things.ubidots.com/api/v1.6/devices/led/led/lv?token=A1E-GDLoAGUiVlkf7bGk94QwygEUMN0x9F')
+    print(int(str(v.content)[2]))
+    time.sleep(6)
+
+
+10) LED BLINK
+
+import RPi.GPIO as GPIO
+import time
+
+led=1
+ledPin = 4   #(4-ip-line2,10-gnd-line1)
+
+# Pin Setup:
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(ledPin, GPIO.OUT) # LED pin set as output
+
+print("Here we go! Press CTRL+C to exit")
+try:
+    while 1:
+        if led==1:
+	    led=0
+            GPIO.output(ledPin, GPIO.LOW)
+
+        else:
+	    led=1
+            GPIO.output(ledPin, GPIO.HIGH)
+	    time.sleep(6)
+except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+    GPIO.cleanup() # cleanup all GPIO
+
+
+
+
+11) SERVO MOTOR
+
+import RPi.GPIO as GPIO
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(19,GPIO.OUT)
+p = GPIO.PWM(19,50)
+p.start(0)
+
+while 1:
+	p.ChangeDuty()
+
